@@ -32,3 +32,7 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+_replicator/
+_users/
+config.json
+pouch__all_dbs__/

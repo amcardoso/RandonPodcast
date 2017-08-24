@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Incluir Podcast</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <img src="{{podcast.imagem}}" />
+    <ion-card-content>
+      <ion-card-title>
+        {{podcast.titulo}}
+      </ion-card-title>
+      <ion-list>
+        <ion-item>
+          <ion-input type="text" placeholder="URL do feed" (keyup)="verificarEnderecoAlterado()" [(ngModel)]="urlCadastro"></ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+<ion-footer>
+  <ion-row>
+    <ion-col>
+      <button ion-button block (click)="verificarUrl()" [disabled]="urlCadastro.length == 0" [hidden]="!enderecoAlterado">
+            Verificar
+          </button>
+      <button ion-button block (click)="salvarPodcast()" [disabled]="salvarDesabilitado" [hidden]="enderecoAlterado">
+            Salvar
+          </button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

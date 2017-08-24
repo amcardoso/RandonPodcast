@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Podcasts</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-list>
+      <ion-item *ngFor="let podcast of podcasts">
+        <ion-thumbnail item-start>
+          <img src="data:{{returnData(podcast,'content_type')}};base64,{{returnData(podcast,'base64')}}">
+        </ion-thumbnail>
+        <h2>My Neighbor Totoro</h2>
+        <p>Hayao Miyazaki • 1988</p>
+        <button ion-button clear item-end>View</button>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+</ion-content>
