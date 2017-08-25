@@ -10,13 +10,14 @@
 <ion-content padding>
   <ion-card>
     <ion-list>
-      <ion-item *ngFor="let podcast of podcasts">
+      <ion-item *ngFor="let podcast of podcasts" (click)="detalhe(podcast)">
         <ion-thumbnail item-start>
           <img src="data:{{returnData(podcast,'content_type')}};base64,{{returnData(podcast,'base64')}}">
         </ion-thumbnail>
-        <h2>My Neighbor Totoro</h2>
-        <p>Hayao Miyazaki • 1988</p>
-        <button ion-button clear item-end>View</button>
+        <h2>{{podcast.titulo}}</h2>
+        <button ion-button clear icon-only item-end (click)="deletar(podcast)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
       </ion-item>
     </ion-list>
   </ion-card>

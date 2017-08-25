@@ -83,5 +83,9 @@ export class DbService {
   public carregarAnexo(id: string, anexo: string): Promise<string> {
     return this.db.getAttachment(id, anexo);
   }
+
+  public apagarPodcast(podcast: Podcast): Promise<any> {
+    return this.db.remove(podcast);
+  }
   
 }
