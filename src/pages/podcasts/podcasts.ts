@@ -20,7 +20,8 @@ export class PodcastsPage {
     this.podcastService.findAll(true).subscribe((podcasts) => {
       this.logger.info('PodcastsPage :: constructor :: podcasts', podcasts);
       this.podcasts = podcasts;
-    },(error) => {
+      this.sincronizar();
+    }, (error) => {
       this.logger.error('PodcastsPage :: constructor :: error', error);
     });
   }
@@ -50,8 +51,35 @@ export class PodcastsPage {
     })
   }
 
+  public sincronizar(): void {
+    for (let i in this.podcasts) {
+      this.podcasts[i].syncIcon = 'sync';
+      this.podcastService.verificarUrl(this.podcasts[i].feed).subscribe((podcastNovo: Podcast) => {
+        this.logger.info('PodcastsPage :: sincronizar :: podcastNovo', podcastNovo);
+        this.podcasts[i].episodios = podcastNovo.episodios;
+        this.podcasts[i].imagem = podcastNovo.imagem;
+        this.podcasts[i].link = podcastNovo.link;
+        this.podcasts[i].titulo = podcastNovo.titulo;
+        if (this.podcasts[i].episodios.length != podcastNovo.episodios.length) {
+          this.podcastService.salvarPodcast(this.podcasts[i]).subscribe((retorno) => {
+            this.logger.info('PodcastsPage :: sincronizar :: retorno', retorno);
+            this.podcasts[i].syncIcon = 'checkmark-circle';
+          }, (error) => {
+            this.logger.error('PodcastsPage :: sincronizar :: erro', error);
+            this.podcasts[i].syncIcon = 'alert';
+          });
+        } else {
+          this.podcasts[i].syncIcon = 'checkmark-circle';
+        }
+      }, (error) => {
+        this.logger.error('PodcastsPage :: sincronizar :: error', error);
+        this.podcasts[i].syncIcon = 'alert';
+      });
+    }
+  }
+
   public detalhe(podcast: Podcast): void {
-    this.navCtrl.setRoot(PodcastPage, {podcast: podcast});
+    this.navCtrl.setRoot(PodcastPage, { podcast: podcast });
   }
 
 }

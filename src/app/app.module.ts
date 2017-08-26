@@ -8,6 +8,7 @@ import { HomePage } from '../pages/home/home';
 import { CadastroPage } from '../pages/cadastro/cadastro';
 import { PodcastsPage } from '../pages/podcasts/podcasts';
 import { PodcastPage } from '../pages/podcast/podcast';
+import { BuscaPage } from '../pages/busca/busca';
 
 import { DbService, LoggerService, PodcastService, UtilService } from '../services';
 
@@ -20,7 +21,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     CadastroPage,
     PodcastsPage,
-    PodcastPage
+    PodcastPage,
+    BuscaPage
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     CadastroPage,
     PodcastsPage,
-    PodcastPage
+    PodcastPage,
+    BuscaPage
   ],
   providers: [
     StatusBar,

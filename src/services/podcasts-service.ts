@@ -52,7 +52,7 @@ export class PodcastService {
     return resposta;
   }
 
-  public salvarPodcast(podcast: Podcast): Promise<any> {
+  public salvarPodcast(podcast: Podcast): Observable<any> {
     return this.db.create(podcast);
   }
 
@@ -70,5 +70,27 @@ export class PodcastService {
 
   public apagarPodcast(podcast: Podcast): Promise<any> {
     return this.db.apagarPodcast(podcast);
+  }
+
+  public pesquisarItunes(criterio: string): Observable<any> {
+    let param: any = {
+      params: {
+        term: criterio,
+        media: 'podcast'
+      }
+    };
+    let resposta: Observable<any> = new Observable<any>((observer) => {
+      this.http.get('https://itunes.apple.com/search', param).timeoutWith(10000, Observable.throw(new Error('Tempo Excedido!'))).subscribe((retorno) => {
+        this.logger.info('PodcastService :: pesquisarItunes :: retorno', JSON.parse(retorno._body));
+        observer.next(JSON.parse(retorno._body));
+        observer.complete();
+      }, (err) => {
+        this.logger.error('PodcastService :: pesquisarItunes :: erro', err);
+        observer.error(err);
+        observer.complete();
+      });
+    });
+
+    return resposta;
   }
 }

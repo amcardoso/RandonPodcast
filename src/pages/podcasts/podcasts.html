@@ -4,21 +4,25 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Podcasts</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="sincronizar()">
+        <ion-icon name="sync"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-card>
-    <ion-list>
-      <ion-item *ngFor="let podcast of podcasts" (click)="detalhe(podcast)">
-        <ion-thumbnail item-start>
-          <img src="data:{{returnData(podcast,'content_type')}};base64,{{returnData(podcast,'base64')}}">
-        </ion-thumbnail>
-        <h2>{{podcast.titulo}}</h2>
-        <button ion-button clear icon-only item-end (click)="deletar(podcast)">
-          <ion-icon name="trash"></ion-icon>
-        </button>
-      </ion-item>
-    </ion-list>
-  </ion-card>
+  <ion-list>
+    <ion-item *ngFor="let podcast of podcasts" (click)="detalhe(podcast)">
+      <ion-thumbnail item-start>
+        <img src="data:{{returnData(podcast,'content_type')}};base64,{{returnData(podcast,'base64')}}">
+      </ion-thumbnail>
+      <h2>{{podcast.titulo}}</h2>
+      <ion-icon name="{{podcast.syncIcon}}"></ion-icon>
+      <button ion-button clear icon-only item-end (click)="deletar(podcast)">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
 </ion-content>

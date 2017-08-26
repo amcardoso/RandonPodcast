@@ -36,3 +36,5 @@ _replicator/
 _users/
 config.json
 pouch__all_dbs__/
+podcasts/*.ldb
+podcasts/MANIFEST-*

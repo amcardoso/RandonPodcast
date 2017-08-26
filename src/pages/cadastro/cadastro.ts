@@ -58,30 +58,16 @@ export class CadastroPage {
   }
 
   public salvarPodcast(): void {
-    let arquivo: string = this.utilService.retornaNomeArquivo(this.podcast.imagem);
     this.utilService.presentLoading('Salvando Podcast');
-    encode(this.podcast.imagem, { string: true, local: false }, (error, retorno) => {
-      if (error) {
-        this.utilService.dismissLoading();
-        this.utilService.presentToast('Erro ao salvar o feed');
-        this.logger.error('CadastroPage :: verificarEnderecoAlterado :: error', error);
-        return;
-      }
-      this.podcast._attachments = {};
-      this.podcast._attachments[arquivo] = {
-        content_type: mime.lookup(arquivo),
-        data: retorno
-      };
-      this.podcastService.salvarPodcast(this.podcast).then((retorno: any) => {
-        this.utilService.dismissLoading();
-        this.utilService.presentToast('Podcast adicionado com sucesso');
-        this.navCtrl.setRoot(HomePage);
-      }).catch((error) => {
-        this.utilService.dismissLoading();
-        this.utilService.presentToast('Erro ao salvar o feed');
-      });
+    this.podcastService.salvarPodcast(this.podcast).subscribe((retorno) => {
+      this.utilService.dismissLoading();
+      this.utilService.presentToast('Podcast adicionado com sucesso');
+      this.navCtrl.setRoot(HomePage);
+    }, (error) => {
+      this.utilService.dismissLoading();
+      this.utilService.presentToast('Erro ao salvar o feed');
+      this.logger.error('CadastroPage :: salvarPodcast :: error', error);
     });
-
   }
 
 }
