@@ -14,15 +14,19 @@
       <ion-input type="text" [(ngModel)]="criterio"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-card *ngFor="let podcast of podcastsItunes">
-    <img src="{{podcast.artworkUrl600}}" />
-    <ion-card-content>
-      <ion-card-title>
-        {{podcast.collectionName}}
-      </ion-card-title>
+  <ion-list>
+    <ion-item *ngFor="let podcast of podcastsItunes">
+      <ion-thumbnail item-start>
+        <img src="{{podcast.artworkUrl600}}" />
+      </ion-thumbnail>
+      <h2>{{podcast.collectionName}}</h2>
       <p>{{podcast.feedUrl}}</p>
-    </ion-card-content>
-  </ion-card>
+      <ion-icon name="{{podcast.syncIcon}}"></ion-icon>
+      <button ion-button clear icon-only item-end (click)="incluir(podcast.feedUrl)">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
 </ion-content>
 <ion-footer>
   <ion-row>

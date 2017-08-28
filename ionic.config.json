@@ -4,19 +4,5 @@
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  },
-  "proxies": [
-    {
-      "path": "/podcasts/feed",
-      "proxyUrl": "http://www.deviante.com.br/podcasts/feed"
-    },
-    {
-      "path": "/users",
-      "proxyUrl": "http://feeds.soundcloud.com/users"
-    },
-    {
-      "path": "/podcast",
-      "proxyUrl": "http://www.naosalvo.com.br/podcast"
-    }
-  ]
+  }
 }

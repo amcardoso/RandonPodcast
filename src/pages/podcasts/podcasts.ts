@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { PodcastService, UtilService, LoggerService } from '../../services';
 import { Podcast } from '../../models';
 import { PodcastPage } from '../podcast/podcast';
+import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: 'page-podcasts',
@@ -17,10 +18,12 @@ export class PodcastsPage {
   }
 
   private listarTodos(): void {
-    this.podcastService.findAll(true).subscribe((podcasts) => {
-      this.logger.info('PodcastsPage :: constructor :: podcasts', podcasts);
-      this.podcasts = podcasts;
-      this.sincronizar();
+    this.podcastService.findAll(true).subscribe((podcasts: Podcast[]) => {
+      if (podcasts.length > 0) {
+        this.logger.info('PodcastsPage :: constructor :: podcasts', podcasts);
+        this.podcasts = podcasts;
+        this.sincronizar();
+      }
     }, (error) => {
       this.logger.error('PodcastsPage :: constructor :: error', error);
     });
@@ -29,11 +32,13 @@ export class PodcastsPage {
   public returnData(podcast: Podcast, tipo: string): string {
     let arquivo: string = this.utilService.retornaNomeArquivo(podcast.imagem);
     let anexo: any = podcast._attachments[arquivo];
-    if (tipo === 'content_type') {
-      return anexo.content_type;
-    }
-    if (tipo === 'base64') {
-      return anexo.data;
+    if (anexo) {
+      if (tipo === 'content_type') {
+        return anexo.content_type;
+      }
+      if (tipo === 'base64') {
+        return anexo.data;
+      }
     }
     return '';
   }
@@ -52,30 +57,44 @@ export class PodcastsPage {
   }
 
   public sincronizar(): void {
-    for (let i in this.podcasts) {
-      this.podcasts[i].syncIcon = 'sync';
-      this.podcastService.verificarUrl(this.podcasts[i].feed).subscribe((podcastNovo: Podcast) => {
-        this.logger.info('PodcastsPage :: sincronizar :: podcastNovo', podcastNovo);
-        this.podcasts[i].episodios = podcastNovo.episodios;
-        this.podcasts[i].imagem = podcastNovo.imagem;
-        this.podcasts[i].link = podcastNovo.link;
-        this.podcasts[i].titulo = podcastNovo.titulo;
-        if (this.podcasts[i].episodios.length != podcastNovo.episodios.length) {
-          this.podcastService.salvarPodcast(this.podcasts[i]).subscribe((retorno) => {
-            this.logger.info('PodcastsPage :: sincronizar :: retorno', retorno);
-            this.podcasts[i].syncIcon = 'checkmark-circle';
-          }, (error) => {
-            this.logger.error('PodcastsPage :: sincronizar :: erro', error);
-            this.podcasts[i].syncIcon = 'alert';
-          });
-        } else {
-          this.podcasts[i].syncIcon = 'checkmark-circle';
-        }
-      }, (error) => {
-        this.logger.error('PodcastsPage :: sincronizar :: error', error);
-        this.podcasts[i].syncIcon = 'alert';
+    this.utilService.presentToast('Sincronizando podcasts');
+
+    this.sincronizacao().subscribe((retorno) => {
+      this.utilService.dismissLoading();
+    }, (error) => {
+      this.logger.error('PodcastsPage :: sincronizar :: error', error);
+      this.utilService.dismissLoading();
+    });
+  }
+
+  private sincronizacao(): Observable<boolean> {
+    let retorno: Observable<boolean> = new Observable<boolean>((observer) => {
+      this.podcasts.forEach(podcast => {
+        this.podcastService.verificarUrl(podcast.feed).subscribe((podcastNovo: Podcast) => {
+          this.logger.info('PodcastsPage :: sincronizar :: podcastNovo', podcastNovo);
+          if (podcast.episodios.length != podcastNovo.episodios.length) {
+            podcast.episodios = podcastNovo.episodios;
+            podcast.imagem = podcastNovo.imagem;
+            podcast.link = podcastNovo.link;
+            podcast.titulo = podcastNovo.titulo;
+            this.podcastService.salvarPodcast(podcast).subscribe((retorno) => {
+              this.logger.info('PodcastsPage :: sincronizar :: sincronizado :: retorno', retorno);
+              observer.next(true);
+              observer.complete;
+            }, (error) => {
+              this.logger.error('PodcastsPage :: sincronizar :: erro', error);
+              observer.error();
+              observer.complete;
+            });
+          }
+        }, (error) => {
+          this.logger.error('PodcastsPage :: sincronizar :: error', error);
+          observer.error();
+          observer.complete;
+        });
       });
-    }
+    });
+    return retorno;
   }
 
   public detalhe(podcast: Podcast): void {

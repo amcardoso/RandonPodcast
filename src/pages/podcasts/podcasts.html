@@ -14,12 +14,11 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item *ngFor="let podcast of podcasts" (click)="detalhe(podcast)">
-      <ion-thumbnail item-start>
+    <ion-item *ngFor="let podcast of podcasts">
+      <ion-thumbnail item-start (click)="detalhe(podcast)">
         <img src="data:{{returnData(podcast,'content_type')}};base64,{{returnData(podcast,'base64')}}">
       </ion-thumbnail>
-      <h2>{{podcast.titulo}}</h2>
-      <ion-icon name="{{podcast.syncIcon}}"></ion-icon>
+      <h2 (click)="detalhe(podcast)">{{podcast.titulo}}</h2>
       <button ion-button clear icon-only item-end (click)="deletar(podcast)">
         <ion-icon name="trash"></ion-icon>
       </button>

@@ -17,7 +17,7 @@ export class DbService {
 
   constructor(private logger: LoggerService, private utilService: UtilService) {
     this.db = new PouchDB(this.podcasts);
-    PouchDB.replicate('podcasts', 'http://localhost:5984/podcasts', { live: true });
+    // PouchDB.replicate('podcasts', 'http://localhost:5984/podcasts', { live: true });
     this.createDesignDoc(this.INDEX, function mapFunction(doc) {
       if (doc && doc.feed) {
         emit(doc.feed);
