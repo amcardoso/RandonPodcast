@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { PodcastService, UtilService, LoggerService } from '../../services';
+import { UtilService } from '../../services';
 import { Podcast } from '../../models';
 
 @Component({
@@ -11,8 +11,8 @@ export class PodcastPage {
 
   public podcast: Podcast = new Podcast();
 
-  constructor(public navCtrl: NavController, private podcastService: PodcastService, private utilService: UtilService, private logger: LoggerService, private navParams: NavParams) {
-    this.podcast = navParams.get('podcast');
+  constructor(public navCtrl: NavController, private utilService: UtilService, private navParams: NavParams) {
+    this.podcast = this.navParams.get('podcast');
   }
 
   public returnData(podcast: Podcast, tipo: string): string {

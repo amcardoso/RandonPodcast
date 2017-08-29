@@ -3,8 +3,6 @@ import { NavController } from 'ionic-angular';
 import { Podcast } from '../../models';
 import { PodcastService, UtilService, LoggerService } from '../../services';
 import { HomePage } from '../home/home';
-import { encode } from 'node-base64-image';
-import mime from 'mime-types';
 
 @Component({
   selector: 'page-cadastro',

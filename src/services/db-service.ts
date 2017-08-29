@@ -16,7 +16,7 @@ export class DbService {
   private INDEX: string = 'by_feed';
 
   constructor(private logger: LoggerService, private utilService: UtilService) {
-    this.db = new PouchDB(this.podcasts);
+    this.db = new PouchDB(this.podcasts, {auto_compaction: true});
     // PouchDB.replicate('podcasts', 'http://localhost:5984/podcasts', { live: true });
     this.createDesignDoc(this.INDEX, function mapFunction(doc) {
       if (doc && doc.feed) {

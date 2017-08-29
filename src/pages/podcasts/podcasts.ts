@@ -22,7 +22,6 @@ export class PodcastsPage {
       if (podcasts.length > 0) {
         this.logger.info('PodcastsPage :: constructor :: podcasts', podcasts);
         this.podcasts = podcasts;
-        this.sincronizar();
       }
     }, (error) => {
       this.logger.error('PodcastsPage :: constructor :: error', error);
@@ -57,7 +56,7 @@ export class PodcastsPage {
   }
 
   public sincronizar(): void {
-    this.utilService.presentToast('Sincronizando podcasts');
+    this.utilService.presentLoading('Sincronizando podcasts');
 
     this.sincronizacao().subscribe((retorno) => {
       this.utilService.dismissLoading();
@@ -79,8 +78,6 @@ export class PodcastsPage {
             podcast.titulo = podcastNovo.titulo;
             this.podcastService.salvarPodcast(podcast).subscribe((retorno) => {
               this.logger.info('PodcastsPage :: sincronizar :: sincronizado :: retorno', retorno);
-              observer.next(true);
-              observer.complete;
             }, (error) => {
               this.logger.error('PodcastsPage :: sincronizar :: erro', error);
               observer.error();
@@ -93,6 +90,8 @@ export class PodcastsPage {
           observer.complete;
         });
       });
+      observer.next(true);
+      observer.complete;
     });
     return retorno;
   }

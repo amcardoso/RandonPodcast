@@ -31,8 +31,8 @@ export class HomePage {
         this.content_type = anexo.content_type;
         this.data[0] = 'data:';
         this.data[1] = ';base64,';
-        this.utilService.dismissLoading();
       }
+      this.utilService.dismissLoading();
     }, (error) => {
       this.utilService.dismissLoading();
       this.logger.error('HomePage :: sortear :: error', error);
